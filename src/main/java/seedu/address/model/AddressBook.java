@@ -6,9 +6,10 @@ import java.util.List;
 
 import javafx.collections.ObservableList;
 import seedu.address.model.person.UniquePersonList;
+import seedu.address.model.person.Word;
 import seedu.address.model.tag.Tag;
 
-import seedu.address.model.person.Word;
+
 
 
 /**
@@ -74,8 +75,8 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public boolean hasTag(Tag tag) {
         requireNonNull(tag);
-        for (Person person:persons) {
-            if(person.getTags().contains(tag)){
+        for (Word person:persons) {
+            if (person.getTags().contains(tag)) {
                 return true;
             }
         }
