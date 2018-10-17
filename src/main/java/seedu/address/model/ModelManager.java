@@ -94,6 +94,14 @@ public class ModelManager extends ComponentManager implements Model {
     }
 
     @Override
+    public void addGroup(Tag toAdd) {
+        requireNonNull(toAdd);
+        if (!versionedAddressBook.hasTag(toAdd)) {
+            versionedAddressBook.addGroup(toAdd);
+        }
+    }
+
+    @Override
     public void deletePerson(Word target) {
 
         versionedAddressBook.removePerson(target);

@@ -2,7 +2,9 @@ package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javafx.collections.ObservableList;
 import seedu.address.model.person.UniquePersonList;
@@ -30,6 +32,8 @@ public class AddressBook implements ReadOnlyAddressBook {
     {
         persons = new UniquePersonList();
     }
+
+    private final Set<Tag> addedTag = new HashSet<>();
 
     public AddressBook() {}
 
@@ -77,6 +81,11 @@ public class AddressBook implements ReadOnlyAddressBook {
         requireNonNull(tag);
         for (Word person:persons) {
             if (person.getTags().contains(tag)) {
+                return true;
+            }
+        }
+        for (Tag temptag: addedTag) {
+            if (temptag.equals(tag)) {
                 return true;
             }
         }
@@ -152,5 +161,9 @@ public class AddressBook implements ReadOnlyAddressBook {
         for (Word person:persons_temp) {
             persons.remove(person);
         }
+    }
+
+    public void addGroup(Tag toAdd) {
+        addedTag.add(toAdd);
     }
 }

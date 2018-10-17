@@ -99,4 +99,9 @@ public interface Model {
      * @param toDelete tag to delete as a word group
      */
     void deleteGroup(Tag toDelete);
+
+    /**
+     * @param toAdd tag to delete as a word group
+     */
+    void addGroup(Tag toAdd);
 }
