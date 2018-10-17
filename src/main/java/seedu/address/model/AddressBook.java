@@ -135,4 +135,22 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
 
+    /**
+     * @param toDelete delete the word group from each word
+     */
+    public void deleteGroup(Tag toDelete) {
+        requireNonNull(toDelete);
+        final UniquePersonList persons_temp = new UniquePersonList();
+        for (Word person:persons) {
+            if (person.getTags().contains(toDelete)) {
+                person.deleteTags(toDelete);
+            }
+            if (person.getTags().isEmpty()) {
+                persons_temp.add(person);
+            }
+        }
+        for (Word person:persons_temp) {
+            persons.remove(person);
+        }
+    }
 }

@@ -22,7 +22,7 @@ public class Word {
 
     // Data fields
     private final Address address;
-    private final Set<Tag> tags = new HashSet<>();
+    private Set<Tag> tags = new HashSet<>();
 
     /**
      * Every field must be present and not null.
@@ -117,4 +117,7 @@ public class Word {
         return builder.toString();
     }
 
+    public void deleteTags(Tag toDelete) {
+        tags.remove(toDelete);
+    }
 }

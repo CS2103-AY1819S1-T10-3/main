@@ -13,9 +13,9 @@ import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.ComponentManager;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.model.AddressBookChangedEvent;
-
-import seedu.address.model.tag.Tag;
 import seedu.address.model.person.Word;
+import seedu.address.model.tag.Tag;
+
 
 /**
  * Represents the in-memory model of the address book data.
@@ -66,15 +66,31 @@ public class ModelManager extends ComponentManager implements Model {
     }
 
     @Override
-    public boolean hasTag(Set<Tag> tags){
+    public boolean hasTag(Set<Tag> tags) {
         requireNonNull(tags);
         boolean check = true;
         for (Tag tag: tags) {
-            if(!versionedAddressBook.hasTag(tag)) {
+            if (!versionedAddressBook.hasTag(tag)) {
                 check = false;
             }
         }
         return check;
+    }
+
+    @Override
+    public boolean hasTag(Tag tag) {
+        requireNonNull(tag);
+        boolean check = true;
+        if (!versionedAddressBook.hasTag(tag)) {
+            check = false;
+        }
+        return check;
+    }
+
+    @Override
+    public void deleteGroup(Tag toDelete) {
+        requireNonNull(toDelete);
+        versionedAddressBook.deleteGroup(toDelete);
     }
 
     @Override

@@ -59,7 +59,7 @@ public class AddCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
-        if (!model.hasTag(toAdd.getTags())){
+        if (!model.hasTag(toAdd.getTags())) {
             throw new CommandException(MESSAGE_NO_GROUP);
         }
 

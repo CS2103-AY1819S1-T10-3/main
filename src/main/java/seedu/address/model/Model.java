@@ -4,9 +4,9 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
-
-import seedu.address.model.tag.Tag;
 import seedu.address.model.person.Word;
+import seedu.address.model.tag.Tag;
+
 
 
 /**
@@ -86,4 +86,17 @@ public interface Model {
      * @return whether the tag has existed in the list
      */
     boolean hasTag(Set<Tag> tags);
+
+    /**
+     *
+     * @param tag set of tags that is entered by the user
+     * @return whether the tag has existed in the list
+     */
+    boolean hasTag(Tag tag);
+
+
+    /**
+     * @param toDelete tag to delete as a word group
+     */
+    void deleteGroup(Tag toDelete);
 }
