@@ -216,7 +216,7 @@ However, due to the lack of resources online and the fact that the API for dicti
 </ul>
 </div>
 <div class="paragraph">
-<p>Below is a description on how the select function operates:</p>
+<p>Below is a description on how the learn function operates:</p>
 </div>
 <div class="paragraph">
 <p>Step 1: User wants to learn this new word he just heard of, eg: Happiness</p>
@@ -229,6 +229,40 @@ However, due to the lack of resources online and the fact that the API for dicti
 </div>
 <div class="paragraph">
 <p>Step 4: The word is then stored within the storage file.</p>
+</div>
+<div class="paragraph">
+<p><strong>Word Of The Day</strong></p>
+</div>
+<div class="paragraph">
+<p>The Word Of The Day command is indicated as <code>WordOfTheDay</code> in <code>commands</code>, and inherits the <code>Command</code> class. It enables the user to display the current word of the day taken from website Dictionary.com. Similarly to the "learn" command, this command also requires a working internet connection. It is impossible to make this feature available offline since the word of the day cannot be predicted on Dictionary.com</p>
+</div>
+<div class="paragraph">
+<p>Functions added:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Dictionary#doesWordOfTheDayExist()</code>&#8201;&#8212;&#8201;Checks to see if the word of the day exist on Dictionary.com and returns the word of the day page as a Document object.</p>
+</li>
+<li>
+<p><code>Dictionary#fetchWordOfTheDay()</code>&#8201;&#8212;&#8201;Parses the word of the day and its meaning from the Document object returned by <code>doesWordOfTheDayExist()</code> and returns itself (Dictionary object).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Below is a description on how the Word Of The Day function operates:</p>
+</div>
+<div class="paragraph">
+<p>Step 1: User cannot think of a word so he/she wants to display the word of the day on Dictionary.com.</p>
+</div>
+<div class="paragraph">
+<p>Step 2: User would make sure that there is a working internet connection.</p>
+</div>
+<div class="paragraph">
+<p>Step 3: User would type "word" into the command line.</p>
+</div>
+<div class="paragraph">
+<p>Step 4: The word of the day will be fetched online. Should it be successful, the word of the day and its meaning will be displayed.</p>
 </div>
 </div>
 </div>
@@ -465,4 +499,4 @@ High (Need to have) - PPP, Medium (Nice to have) - PP, Low (Not very needed) - P
 </tbody>
 </table>
 </div>
-</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-10-30 06:42:52 UTC</div></div></div></body></html>
+</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-10-30 07:37:11 UTC</div></div></div></body></html>
