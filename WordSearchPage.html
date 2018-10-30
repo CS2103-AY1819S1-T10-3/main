@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Dummy Search Page</title>
+  <script type="text/javascript">
+    function getJsonFromUrl() {
+      var query = location.search.substr(1);
+      var result = {};
+      query.split("&").forEach(function(part) {
+        var item = part.split("=");
+        result[item[0]] = decodeURIComponent(item[1]);
+      });
+      return result;
+    }
+
+    document.addEventListener("DOMContentLoaded", function(event) {
+      document.getElementById("name").innerHTML=getJsonFromUrl().name;
+    });
+
+    document.addEventListener("DOMContentLoaded", function(event) {
+      document.getElementById("meaning").innerHTML=getJsonFromUrl().meaning;
+    });
+  </script>
+</head>
+<body>
+  <font size="+4" face="Arial">
+    <span id="name"></span><br>
+  </font>
+  <hr>
+  <font size="+3" face="Arial">
+    Meaning:<br>
+  </font>
+  <font size="+2" face="Arial"><span id="meaning"></span></font>
+</body>
+</html>
