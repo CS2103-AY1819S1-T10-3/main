@@ -175,10 +175,16 @@ Attempting to call the <code>answer</code> command without first calling <code>t
 <p><strong>Show implementation</strong></p>
 </div>
 <div class="paragraph">
-<p>The show command is indicated as <code>Show</code> in <code>commands</code>, and inherits the <code>Command</code> class. It is a more advanced version of <code>Find</code> in a sense that it displays the word&#8217;s definition on the Ui screen page. The reason why this was created and <code>Find</code> was left alone was because we wanted to have more abstraction in terms of code.
-As for <code>find</code>, perhaps the team and I can find another purpose for it.
-As such, <code>Show</code> was implemented with a more Ui state of mind, to ensure the user&#8217;s ease of use when finding the words for display of their meanings as AddressBook level 4 did not cater to this particular arrangement.
-Moreover, it also encompasses multiple words, which meant that users can always pick and dump a whole bunch of words and it will filter out as needed, accordingly.</p>
+<p>The show command is indicated as <code>Show</code> in <code>commands</code>, and inherits the <code>Command</code> class. It is a more advanced version of <code>Find</code> in a sense that it displays the word&#8217;s definition on the Ui screen page. The reason why this was created and <code>Find</code> was left alone was because we wanted to have more abstraction in terms of code.</p>
+</div>
+<div class="paragraph">
+<p>As for <code>find</code>, perhaps the team and I can find another purpose for it.</p>
+</div>
+<div class="paragraph">
+<p>As such, <code>Show</code> was implemented with a more Ui state of mind, to ensure the user&#8217;s ease of use when finding the words for display of their meanings as AddressBook level 4 did not cater to this particular arrangement.</p>
+</div>
+<div class="paragraph">
+<p>Moreover, it also encompasses multiple words, which meant that users can always pick and dump a whole bunch of words and it will filter out as needed, accordingly.</p>
 </div>
 <div class="paragraph">
 <p>Below is a description on how the select function operates:</p>
@@ -186,18 +192,44 @@ Moreover, it also encompasses multiple words, which meant that users can always 
 <div class="paragraph">
 <p>Step 1: User wants to query a bunch of words and find out their meanings, tags altogether.</p>
 </div>
-<div class="paragraph">
-<p>Step 2: <code>ShowCommand</code> checks through the entire xml file and filters out the ones being typed.</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Multiple words are allowed to be queried. This allows for more flexibility compared to the Ui option.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p>Step 3: The result is the list of filtered words, together with their definition and tags being displated.</p>
+<p>Step 2: <code>ShowCommand</code> checks through the entire xml file of LearnVocabulary and filters out the ones that were keyed in.</p>
+</div>
+<div class="paragraph">
+<p>Step 3: The result is the list of filtered words, together with their definition and tags being displayed.</p>
 </div>
 <div class="paragraph">
 <p><strong>Learn</strong></p>
 </div>
 <div class="paragraph">
-<p>The learn command is indicated as <code>Learn</code> in <code>commands</code>, and inherits the <code>Command</code> class. It enables the user to "learn" a word from the world wide web. This command is delicate in the sense that it requires the use of Internet, should there be an absence of Internet connection, it has already been taken care of via throwing an Exception. There was a discussion to have an "Offline" version of the dictionary so that we can better attend to the tests, especially since it might be an offline environment.
-However, due to the lack of resources online and the fact that the API for dictionary only allows for 250 queries, we opted to do the online version instead.</p>
+<p>The backbone of LearnVocabulary would have to be the <code>Learn</code> command, because it allows the user to query words from the internet and parse their meanings into readable format for storage.</p>
+</div>
+<div class="paragraph">
+<p>The learn command is indicated as <code>Learn</code> in <code>commands</code>, and inherits the <code>Command</code> class. It enables the user to "learn" a word from the world wide web.</p>
+</div>
+<div class="paragraph">
+<p>This command is delicate in the sense that it requires the use of Internet, should there be an absence of Internet connection, it has already been taken care of via throwing an Exception.</p>
+</div>
+<div class="paragraph">
+<p>There was a discussion to have an "Offline" version of the dictionary so that we can better attend to the tests, especially since it might be an offline environment.</p>
+</div>
+<div class="paragraph">
+<p>However, due to the lack of resources online and the fact that the API for dictionary only allows for 250 queries, we opted to do the online version instead.</p>
+</div>
+<div class="paragraph">
+<p>It is great to also note that a fresh new copy would give the user access to a few preconfigured words at the disposal of the user.</p>
 </div>
 <div class="paragraph">
 <p>Functions added:</p>
@@ -226,6 +258,18 @@ However, due to the lack of resources online and the fact that the API for dicti
 </div>
 <div class="paragraph">
 <p>Step 3: The word will be searched online, should it be successful, the word and meaning will be displayed on screen.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The newly queried word would be attached with a "toLearn" tag, which allows the user to know that he/she just queried the word and can leave it for the future to learn it.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Step 4: The word is then stored within the storage file.</p>
@@ -400,7 +444,7 @@ Use case ends.</pre>
 <p>Use case ends</p>
 </div>
 <div class="paragraph">
-<p><strong>Learning Support:</strong></p>
+<p><strong>Learn feature:</strong></p>
 </div>
 <div class="paragraph">
 <p>User inputs command (learn)</p>
@@ -416,6 +460,18 @@ Use case ends.</pre>
 </div>
 <div class="paragraph">
 <p>Use case ends</p>
+</div>
+<div class="paragraph">
+<p><strong>Show feature:</strong></p>
+</div>
+<div class="paragraph">
+<p>User inputs command (show)</p>
+</div>
+<div class="paragraph">
+<p>User types in show [word] (or show [word1] [word2]), the word(s) will be displayed on the Ui.</p>
+</div>
+<div class="paragraph">
+<p>Use case ends.</p>
 </div>
 <div class="paragraph">
 <p><strong>Non functional requirements</strong></p>
@@ -499,4 +555,4 @@ High (Need to have) - PPP, Medium (Nice to have) - PP, Low (Not very needed) - P
 </tbody>
 </table>
 </div>
-</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-10-31 12:46:52 UTC</div></div></div></body></html>
+</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-10-31 14:41:51 UTC</div></div></div></body></html>
