@@ -30,7 +30,7 @@
 <li><a href="#implementation">3. Implementation</a>
 <ul class="sectlevel2">
 <li><a href="#undo-redo-feature">3.1. Undo/Redo feature</a></li>
-<li><a href="#proposed-data-encryption">3.2. [Proposed] Data Encryption</a></li>
+<li><a href="#learn-feature">3.2. Learn feature</a></li>
 <li><a href="#logging">3.3. Logging</a></li>
 <li><a href="#Implementation-Configuration">3.4. Configuration</a></li>
 </ul>
@@ -410,7 +410,7 @@ The <code>.pptx</code> files used to create diagrams in this document can be fou
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/SDforDeletePerson.png" alt="SDforDeletePerson" width="800">
+<img src="images/SDforDeleteWord.png" alt="SDforDeleteWord" width="800">
 </div>
 <div class="title">Figure 3. Component interactions for <code>delete 1</code> command (part 1)</div>
 </div>
@@ -431,7 +431,7 @@ Note how the <code>Model</code> simply raises a <code>LearnVocabularyChangedEven
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/SDforDeletePersonEventHandling.png" alt="SDforDeletePersonEventHandling" width="800">
+<img src="images/SDforDeleteWordEventHandling.png" alt="SDforDeleteWordEventHandling" width="800">
 </div>
 <div class="title">Figure 4. Component interactions for <code>delete 1</code> command (part 2)</div>
 </div>
@@ -518,7 +518,7 @@ Note how the event is propagated through the <code>EventsCenter</code> to the <c
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/DeletePersonSdForLogic.png" alt="DeletePersonSdForLogic" width="800">
+<img src="images/DeleteWordSdForLogic.png" alt="DeleteWordSdForLogic" width="800">
 </div>
 <div class="title">Figure 7. Interactions Inside the Logic Component for the <code>delete 1</code> Command</div>
 </div>
@@ -552,11 +552,6 @@ Note how the event is propagated through the <code>EventsCenter</code> to the <c
 <p>does not depend on any of the other three components.</p>
 </li>
 </ul>
-</div>
-<div class="paragraph">
-<p>As a more OOP model, we can store a <code>Tag</code> list in <code>LearnVocabulary</code>, which <code>Word</code> can reference. This would allow <code>LearnVocabulary</code> to only require one <code>Tag</code> object per unique <code>Tag</code>, instead of each <code>Word</code> needing their own <code>Tag</code> object. An example of how such a model may look like is given below.<br>
-<br>
-<span class="image"><img src="images/ModelClassBetterOopDiagram.png" alt="ModelClassBetterOopDiagram" width="800"></span></p>
 </div>
 </div>
 <div class="sect2">
@@ -801,9 +796,327 @@ If the <code>currentStatePointer</code> is at index <code>learnVocabularyStateLi
 </div>
 </div>
 <div class="sect2">
-<h3 id="proposed-data-encryption"><a class="link" href="#proposed-data-encryption">3.2. [Proposed] Data Encryption</a></h3>
+<h3 id="learn-feature"><a class="link" href="#learn-feature">3.2. Learn feature</a></h3>
+<div class="sect3">
+<h4 id="current-implementation-2"><a class="link" href="#current-implementation-2">3.2.1. Current Implementation</a></h4>
+<div class="paragraph">
+<p>The learn mechanism is facilitated by the <code>Dictionary</code> class.
+The backbone of LearnVocabulary would have to be the <code>Learn</code> command, because it allows the user to query words from the internet and parse their meanings into readable format for storage.
+The learn command is indicated as <code>Learn</code> in <code>commands</code>, and inherits the <code>Command</code> class. It enables the user to "learn" a word from the world wide web.
+This command is requires the use of Internet, should there be an absence of Internet connection, it has already been taken care of via throwing an Exception.
+Additionally, it implements the following operations:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Dictionary#invoke()</code>&#8201;&#8212;&#8201;calls the main function of Dictionary which links it to LearnVocabulary</p>
+</li>
+<li>
+<p><code>Dictionary#isConnectedToInternet()</code>&#8201;&#8212;&#8201;checks to see if there is an Internet connection established.</p>
+</li>
+<li>
+<p><code>Dictionary#isWordInOnlineDictionary(Word)</code>&#8201;&#8212;&#8201;checks to see if it is a valid word and if it exists in Dictionary.com</p>
+</li>
+<li>
+<p><code>Dictionary#convertWord(Word)</code>&#8201;&#8212;&#8201;converts word into first letter is in big caps, whilst the others are in small caps.</p>
+</li>
+<li>
+<p><code>Dictionary#isValidWord(Word)</code>&#8201;&#8212;&#8201;checks to see if it word contains any illegal characters.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><code>Dictionary#invoke()</code> is exposed in the <code>LearnCommandParser</code> class as <code>LearnCommandParser#parse()</code>, while all the other operations are self-contained within the <code>Dictionary#invoke()</code> operation.</p>
+</div>
+<div class="paragraph">
+<p>Given below is an example usage scenario and how the learn mechanism behaves at each step.</p>
+</div>
+<div class="paragraph">
+<p>Step 1. The user launches the application for the first time. The user types in <code>learn beautiful</code> into the CLI.</p>
+</div>
+<div class="paragraph">
+<p>There was a discussion to have an "Offline" version of the dictionary so that we can better attend to the tests, especially since it might be an offline environment.</p>
+</div>
+<div class="paragraph">
+<p>However, due to the lack of resources online and the fact that the API for dictionary only allows for 250 queries, we opted to do the online version instead.</p>
+</div>
+<div class="paragraph">
+<p>It is great to also note that a fresh new copy would give the user access to a few preconfigured words at the disposal of the user.</p>
+</div>
+<div class="paragraph">
+<p>Functions added:</p>
+</div>
+<div class="paragraph">
+<p>Below is a description on how the learn function operates:</p>
+</div>
+<div class="paragraph">
+<p>Step 1: User wants to learn this new word he just heard of, eg: Happiness</p>
+</div>
+<div class="paragraph">
+<p>Step 2: User would type the word followed by the command learn, eg: learn happiness</p>
+</div>
+<div class="paragraph">
+<p>Step 3: The word will be searched online, should it be successful, the word and meaning will be displayed on screen.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The newly queried word would be attached with a "toLearn" tag, which allows the user to know that he/she just queried the word and can leave it for the future to learn it.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Step 4: The word is then stored within the storage file.</p>
+</div>
 <div class="paragraph">
 <p><em>{Explain here how the data encryption feature will be implemented}</em></p>
+</div>
+<div class="paragraph">
+<p><strong>Trivia:</strong></p>
+</div>
+<div class="paragraph">
+<p>The trivia function is facilitated by <code>LearnVocabulary</code>.
+Besides storing a <code>UniqueWordList</code>, <code>LearnVocabulary</code> also stores the current trivia question as <code>triviaQuestion</code> and stores a list of trivia questions is <code>triviaQuestionList</code>.
+Scores for a trivia game are also stored using <code>currentScore</code> and <code>maxScore</code>.</p>
+</div>
+<div class="paragraph">
+<p>Additionally, it also implements the following operations:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>setTriviaList</code>&#8201;&#8212;&#8201;sets the trivia question list based on the current vocabulary list</p>
+</li>
+<li>
+<p><code>setTrivia</code>&#8201;&#8212;&#8201;sets the trivia question based on <code>triviaQuestionList</code></p>
+</li>
+<li>
+<p><code>getTrivia</code>&#8201;&#8212;&#8201;outputs the current trivia question.</p>
+</li>
+<li>
+<p><code>updateScore</code>&#8201;&#8212;&#8201;adds 1 to the the`currentScore`</p>
+</li>
+<li>
+<p><code>clearTrivia</code>&#8201;&#8212;&#8201;clears the current trivia question as well as removing it from the <code>triviaQuestionList</code></p>
+</li>
+<li>
+<p><code>isTriviaMode</code>&#8201;&#8212;&#8201;a boolean to indicate whether the model is currently in trivia mode.</p>
+</li>
+<li>
+<p><code>toggleTriviaMode</code>&#8201;&#8212;&#8201;toggle trivia mode</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>These operations are exposed in the <code>Model</code> interface as <code>Model.setTrivia()</code> and <code>Model.getTrivia()</code>.</p>
+</div>
+<div class="paragraph">
+<p>Outlined below is how the trivia function operates at each step:</p>
+</div>
+<div class="paragraph">
+<p>Step 1. The user inputs trivia in the CLI.</p>
+</div>
+<div class="paragraph">
+<p>Step 2. <code>TriviaCommand.execute()</code> checks <code>lastShownList</code> to see if it is empty.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If <code>lastShownList</code> is empty, <code>TriviaCommand.execute()</code> will terminate and a message will be displayed to the user indicating that the user has to add words in before <code>trivia</code> can be used
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Step 3. <code>TriviaCommand.execute()</code> calls <code>toggleTriviaMode</code> to indicate that LearnVocabulary is in trivia mode.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+While in trivia mode, every command the user types will be parsed as <code>TriviaAnsCommand</code>. Trivia mode can be exited by either completing the trivia or typing "triviaExit"
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Step 4. <code>TriviaCommand.execute()</code> now calls <code>Model.setTriviaList()</code> to set the trivia question within <code>LearnVocabulary</code>.</p>
+</div>
+<div class="paragraph">
+<p>Step 5. <code>TriviaCommand.execute()</code> calls <code>Model.getTrivia()</code> and outputs to the user.</p>
+</div>
+<div class="paragraph">
+<p><strong>Answer</strong></p>
+</div>
+<div class="paragraph">
+<p>The answer command is indicated as <code>TriviaAnsCommand</code> in <code>commands</code>. It will take in arguments passed in by the user and checks whether it is the correct/wrong answer to the current trivia question.</p>
+</div>
+<div class="paragraph">
+<p>Outlined below is how the answer function operates:</p>
+</div>
+<div class="paragraph">
+<p>Step 1: User enters  his/her argument.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Attempting to call the <code>answer</code> command without first calling <code>trivia</code> will result in an error.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Step 2: <code>TriviaAnsCommandParser</code> processes the argument and parses it to <code>TriviaAnsCommand</code>.</p>
+</div>
+<div class="paragraph">
+<p>Step 3: <code>TriviaAnsCommand.execute()</code> checks the passed argument is the same word as <code>triviaQuestion</code> in <code>LearnVocabulary</code>.</p>
+</div>
+<div class="paragraph">
+<p>Step 4: Outputs a correct or wrong message based on the result in step 3.</p>
+</div>
+<div class="paragraph">
+<p><strong>Select</strong></p>
+</div>
+<div class="paragraph">
+<p>The select command is indicated as <code>SelectCommand</code> in <code>commands</code>, and inherits the <code>Command</code> class. It selects a word identified by a user using its index from the review list.</p>
+</div>
+<div class="paragraph">
+<p>Below is a description on how the select function operates:</p>
+</div>
+<div class="paragraph">
+<p>Step 1: User calls “select + [index]” where <code>index</code> is the index of the word that the user wants to select.</p>
+</div>
+<div class="paragraph">
+<p>Step 2: <code>SelectCommand</code> checks passed arguments.</p>
+</div>
+<div class="paragraph">
+<p>Step 3: If the user leaves out or in other ways enters an invalid index, <code>SelectCommand</code> throws an exception. Otherwise it returns the desired word.</p>
+</div>
+<div class="paragraph">
+<p><strong>groupadd</strong></p>
+</div>
+<div class="paragraph">
+<p>The select command is indicated as <code>GroupAddCommand</code> in <code>commands</code>, and inherits the <code>Command</code> class. It create a new group in which the uesr can put words.</p>
+</div>
+<div class="paragraph">
+<p>Below is a description on how the select function operates:</p>
+</div>
+<div class="paragraph">
+<p>Step 1: User calls “groupadd + [groupname]” where <code>groupname</code> is the name of the newly added group.</p>
+</div>
+<div class="paragraph">
+<p>Step 2: <code>GroupAddCommand</code> checks passed arguments.</p>
+</div>
+<div class="paragraph">
+<p>Step 3: If the user set a group name that has already existed, the system do nothing(no dublicate). Otherwise it creates a new group.</p>
+</div>
+<div class="paragraph">
+<p><strong>groupdelete</strong></p>
+</div>
+<div class="paragraph">
+<p>The select command is indicated as <code>GroupDeleteCommand</code> in <code>commands</code>, and inherits the <code>Command</code> class. It delete a group and all words in it.</p>
+</div>
+<div class="paragraph">
+<p>Below is a description on how the select function operates:</p>
+</div>
+<div class="paragraph">
+<p>Step 1: User calls “groupdelete + [groupname]” where <code>groupname</code> is the name of the desired deleted group.</p>
+</div>
+<div class="paragraph">
+<p>Step 2: <code>GroupDeleteCommand</code> checks passed arguments.</p>
+</div>
+<div class="paragraph">
+<p>Step 3: If the user set a group name that does not exist, the system throw an exception. Otherwise it deletes the assigned group. Especially, for those words which exist in this only deleted group, those words would also be deleted automately.</p>
+</div>
+<div class="paragraph">
+<p><strong>Show implementation</strong></p>
+</div>
+<div class="paragraph">
+<p>The show command is indicated as <code>Show</code> in <code>commands</code>, and inherits the <code>Command</code> class. It is a more advanced version of <code>Find</code> in a sense that it displays the word&#8217;s definition on the Ui screen page. The reason why this was created and <code>Find</code> was left alone was because we wanted to have more abstraction in terms of code.</p>
+</div>
+<div class="paragraph">
+<p>As for <code>find</code>, perhaps the team and I can find another purpose for it.</p>
+</div>
+<div class="paragraph">
+<p>As such, <code>Show</code> was implemented with a more Ui state of mind, to ensure the user&#8217;s ease of use when finding the words for display of their meanings as AddressBook level 4 did not cater to this particular arrangement.</p>
+</div>
+<div class="paragraph">
+<p>Moreover, it also encompasses multiple words, which meant that users can always pick and dump a whole bunch of words and it will filter out as needed, accordingly.</p>
+</div>
+<div class="paragraph">
+<p>Below is a description on how the select function operates:</p>
+</div>
+<div class="paragraph">
+<p>Step 1: User wants to query a bunch of words and find out their meanings, tags altogether.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Multiple words are allowed to be queried. This allows for more flexibility compared to the Ui option.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Step 2: <code>ShowCommand</code> checks through the entire xml file of LearnVocabulary and filters out the ones that were keyed in.</p>
+</div>
+<div class="paragraph">
+<p>Step 3: The result is the list of filtered words, together with their definition and tags being displayed.</p>
+</div>
+<div class="paragraph">
+<p><strong>Word Of The Day</strong></p>
+</div>
+<div class="paragraph">
+<p>The Word Of The Day command is indicated as <code>WordOfTheDay</code> in <code>commands</code>, and inherits the <code>Command</code> class. It enables the user to display the current word of the day taken from website Dictionary.com. Similarly to the "learn" command, this command also requires a working internet connection. It is impossible to make this feature available offline since the word of the day cannot be predicted on Dictionary.com</p>
+</div>
+<div class="paragraph">
+<p>Functions added:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Dictionary#doesWordOfTheDayExist()</code>&#8201;&#8212;&#8201;Checks to see if the word of the day exist on Dictionary.com and returns the word of the day page as a Document object.</p>
+</li>
+<li>
+<p><code>Dictionary#fetchWordOfTheDay()</code>&#8201;&#8212;&#8201;Parses the word of the day and its meaning from the Document object returned by <code>doesWordOfTheDayExist()</code> and returns itself (Dictionary object).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Below is a description on how the Word Of The Day function operates:</p>
+</div>
+<div class="paragraph">
+<p>Step 1: User cannot think of a word so he/she wants to display the word of the day on Dictionary.com.</p>
+</div>
+<div class="paragraph">
+<p>Step 2: User would make sure that there is a working internet connection.</p>
+</div>
+<div class="paragraph">
+<p>Step 3: User would type "word" into the command line.</p>
+</div>
+<div class="paragraph">
+<p>Step 4: The word of the day will be fetched online. Should it be successful, the word of the day and its meaning will be displayed.</p>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -2303,309 +2616,7 @@ Expected: Similar to previous.</p>
 <h2 id="implemention-everything-below-this-is-what-we-have-done"><a class="link" href="#implemention-everything-below-this-is-what-we-have-done">7. Implemention (EVERYTHING BELOW THIS IS WHAT WE HAVE DONE)</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><strong>Trivia:</strong></p>
-</div>
-<div class="paragraph">
-<p>The trivia function is facilitated by <code>LearnVocabulary</code>.
-Besides storing a <code>UniqueWordList</code>, <code>LearnVocabulary</code> also stores the current trivia question as <code>triviaQuestion</code> and stores a list of trivia questions is <code>triviaQuestionList</code>.
-Scores for a trivia game are also stored using <code>currentScore</code> and <code>maxScore</code>.</p>
-</div>
-<div class="paragraph">
-<p>Additionally, it also implements the following operations:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>setTriviaList</code>&#8201;&#8212;&#8201;sets the trivia question list based on the current vocabulary list</p>
-</li>
-<li>
-<p><code>setTrivia</code>&#8201;&#8212;&#8201;sets the trivia question based on <code>triviaQuestionList</code></p>
-</li>
-<li>
-<p><code>getTrivia</code>&#8201;&#8212;&#8201;outputs the current trivia question.</p>
-</li>
-<li>
-<p><code>updateScore</code>&#8201;&#8212;&#8201;adds 1 to the the`currentScore`</p>
-</li>
-<li>
-<p><code>clearTrivia</code>&#8201;&#8212;&#8201;clears the current trivia question as well as removing it from the <code>triviaQuestionList</code></p>
-</li>
-<li>
-<p><code>isTriviaMode</code>&#8201;&#8212;&#8201;a boolean to indicate whether the model is currently in trivia mode.</p>
-</li>
-<li>
-<p><code>toggleTriviaMode</code>&#8201;&#8212;&#8201;toggle trivia mode</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>These operations are exposed in the <code>Model</code> interface as <code>Model.setTrivia()</code> and <code>Model.getTrivia()</code>.</p>
-</div>
-<div class="paragraph">
-<p>Outlined below is how the trivia function operates at each step:</p>
-</div>
-<div class="paragraph">
-<p>Step 1. The user inputs trivia in the CLI.</p>
-</div>
-<div class="paragraph">
-<p>Step 2. <code>TriviaCommand.execute()</code> checks <code>lastShownList</code> to see if it is empty.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-If <code>lastShownList</code> is empty, <code>TriviaCommand.execute()</code> will terminate and a message will be displayed to the user indicating that the user has to add words in before <code>trivia</code> can be used
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Step 3. <code>TriviaCommand.execute()</code> calls <code>toggleTriviaMode</code> to indicate that LearnVocabulary is in trivia mode.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-While in trivia mode, every command the user types will be parsed as <code>TriviaAnsCommand</code>. Trivia mode can be exited by either completing the trivia or typing "triviaExit"
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Step 4. <code>TriviaCommand.execute()</code> now calls <code>Model.setTriviaList()</code> to set the trivia question within <code>LearnVocabulary</code>.</p>
-</div>
-<div class="paragraph">
-<p>Step 5. <code>TriviaCommand.execute()</code> calls <code>Model.getTrivia()</code> and outputs to the user.</p>
-</div>
-<div class="paragraph">
-<p><strong>Answer</strong></p>
-</div>
-<div class="paragraph">
-<p>The answer command is indicated as <code>TriviaAnsCommand</code> in <code>commands</code>. It will take in arguments passed in by the user and checks whether it is the correct/wrong answer to the current trivia question.</p>
-</div>
-<div class="paragraph">
-<p>Outlined below is how the answer function operates:</p>
-</div>
-<div class="paragraph">
-<p>Step 1: User enters  his/her argument.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Attempting to call the <code>answer</code> command without first calling <code>trivia</code> will result in an error.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Step 2: <code>TriviaAnsCommandParser</code> processes the argument and parses it to <code>TriviaAnsCommand</code>.</p>
-</div>
-<div class="paragraph">
-<p>Step 3: <code>TriviaAnsCommand.execute()</code> checks the passed argument is the same word as <code>triviaQuestion</code> in <code>LearnVocabulary</code>.</p>
-</div>
-<div class="paragraph">
-<p>Step 4: Outputs a correct or wrong message based on the result in step 3.</p>
-</div>
-<div class="paragraph">
-<p><strong>Select</strong></p>
-</div>
-<div class="paragraph">
-<p>The select command is indicated as <code>SelectCommand</code> in <code>commands</code>, and inherits the <code>Command</code> class. It selects a word identified by a user using its index from the review list.</p>
-</div>
-<div class="paragraph">
-<p>Below is a description on how the select function operates:</p>
-</div>
-<div class="paragraph">
-<p>Step 1: User calls “select + [index]” where <code>index</code> is the index of the word that the user wants to select.</p>
-</div>
-<div class="paragraph">
-<p>Step 2: <code>SelectCommand</code> checks passed arguments.</p>
-</div>
-<div class="paragraph">
-<p>Step 3: If the user leaves out or in other ways enters an invalid index, <code>SelectCommand</code> throws an exception. Otherwise it returns the desired word.</p>
-</div>
-<div class="paragraph">
-<p><strong>groupadd</strong></p>
-</div>
-<div class="paragraph">
-<p>The select command is indicated as <code>GroupAddCommand</code> in <code>commands</code>, and inherits the <code>Command</code> class. It create a new group in which the uesr can put words.</p>
-</div>
-<div class="paragraph">
-<p>Below is a description on how the select function operates:</p>
-</div>
-<div class="paragraph">
-<p>Step 1: User calls “groupadd + [groupname]” where <code>groupname</code> is the name of the newly added group.</p>
-</div>
-<div class="paragraph">
-<p>Step 2: <code>GroupAddCommand</code> checks passed arguments.</p>
-</div>
-<div class="paragraph">
-<p>Step 3: If the user set a group name that has already existed, the system do nothing(no dublicate). Otherwise it creates a new group.</p>
-</div>
-<div class="paragraph">
-<p><strong>groupdelete</strong></p>
-</div>
-<div class="paragraph">
-<p>The select command is indicated as <code>GroupDeleteCommand</code> in <code>commands</code>, and inherits the <code>Command</code> class. It delete a group and all words in it.</p>
-</div>
-<div class="paragraph">
-<p>Below is a description on how the select function operates:</p>
-</div>
-<div class="paragraph">
-<p>Step 1: User calls “groupdelete + [groupname]” where <code>groupname</code> is the name of the desired deleted group.</p>
-</div>
-<div class="paragraph">
-<p>Step 2: <code>GroupDeleteCommand</code> checks passed arguments.</p>
-</div>
-<div class="paragraph">
-<p>Step 3: If the user set a group name that does not exist, the system throw an exception. Otherwise it deletes the assigned group. Especially, for those words which exist in this only deleted group, those words would also be deleted automately.</p>
-</div>
-<div class="paragraph">
-<p><strong>Show implementation</strong></p>
-</div>
-<div class="paragraph">
-<p>The show command is indicated as <code>Show</code> in <code>commands</code>, and inherits the <code>Command</code> class. It is a more advanced version of <code>Find</code> in a sense that it displays the word&#8217;s definition on the Ui screen page. The reason why this was created and <code>Find</code> was left alone was because we wanted to have more abstraction in terms of code.</p>
-</div>
-<div class="paragraph">
-<p>As for <code>find</code>, perhaps the team and I can find another purpose for it.</p>
-</div>
-<div class="paragraph">
-<p>As such, <code>Show</code> was implemented with a more Ui state of mind, to ensure the user&#8217;s ease of use when finding the words for display of their meanings as AddressBook level 4 did not cater to this particular arrangement.</p>
-</div>
-<div class="paragraph">
-<p>Moreover, it also encompasses multiple words, which meant that users can always pick and dump a whole bunch of words and it will filter out as needed, accordingly.</p>
-</div>
-<div class="paragraph">
-<p>Below is a description on how the select function operates:</p>
-</div>
-<div class="paragraph">
-<p>Step 1: User wants to query a bunch of words and find out their meanings, tags altogether.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Multiple words are allowed to be queried. This allows for more flexibility compared to the Ui option.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Step 2: <code>ShowCommand</code> checks through the entire xml file of LearnVocabulary and filters out the ones that were keyed in.</p>
-</div>
-<div class="paragraph">
-<p>Step 3: The result is the list of filtered words, together with their definition and tags being displayed.</p>
-</div>
-<div class="paragraph">
-<p><strong>Learn</strong></p>
-</div>
-<div class="paragraph">
-<p>The backbone of LearnVocabulary would have to be the <code>Learn</code> command, because it allows the user to query words from the internet and parse their meanings into readable format for storage.</p>
-</div>
-<div class="paragraph">
-<p>The learn command is indicated as <code>Learn</code> in <code>commands</code>, and inherits the <code>Command</code> class. It enables the user to "learn" a word from the world wide web.</p>
-</div>
-<div class="paragraph">
-<p>This command is delicate in the sense that it requires the use of Internet, should there be an absence of Internet connection, it has already been taken care of via throwing an Exception.</p>
-</div>
-<div class="paragraph">
-<p>There was a discussion to have an "Offline" version of the dictionary so that we can better attend to the tests, especially since it might be an offline environment.</p>
-</div>
-<div class="paragraph">
-<p>However, due to the lack of resources online and the fact that the API for dictionary only allows for 250 queries, we opted to do the online version instead.</p>
-</div>
-<div class="paragraph">
-<p>It is great to also note that a fresh new copy would give the user access to a few preconfigured words at the disposal of the user.</p>
-</div>
-<div class="paragraph">
-<p>Functions added:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>Dictionary#invoke()</code>&#8201;&#8212;&#8201;calls the main function of Dictionary which links it to LearnVocabulary</p>
-</li>
-<li>
-<p><code>Dictionary#isConnectedToInternet()</code>&#8201;&#8212;&#8201;checks to see if there is an Internet connection established.</p>
-</li>
-<li>
-<p><code>Dictionary#isWordInOnlineDictionary()</code>&#8201;&#8212;&#8201;checks to see if it is a valid word and if it exists in Dictionary.com</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Below is a description on how the learn function operates:</p>
-</div>
-<div class="paragraph">
-<p>Step 1: User wants to learn this new word he just heard of, eg: Happiness</p>
-</div>
-<div class="paragraph">
-<p>Step 2: User would type the word followed by the command learn, eg: learn happiness</p>
-</div>
-<div class="paragraph">
-<p>Step 3: The word will be searched online, should it be successful, the word and meaning will be displayed on screen.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-The newly queried word would be attached with a "toLearn" tag, which allows the user to know that he/she just queried the word and can leave it for the future to learn it.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Step 4: The word is then stored within the storage file.</p>
-</div>
-<div class="paragraph">
-<p><strong>Word Of The Day</strong></p>
-</div>
-<div class="paragraph">
-<p>The Word Of The Day command is indicated as <code>WordOfTheDay</code> in <code>commands</code>, and inherits the <code>Command</code> class. It enables the user to display the current word of the day taken from website Dictionary.com. Similarly to the "learn" command, this command also requires a working internet connection. It is impossible to make this feature available offline since the word of the day cannot be predicted on Dictionary.com</p>
-</div>
-<div class="paragraph">
-<p>Functions added:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>Dictionary#doesWordOfTheDayExist()</code>&#8201;&#8212;&#8201;Checks to see if the word of the day exist on Dictionary.com and returns the word of the day page as a Document object.</p>
-</li>
-<li>
-<p><code>Dictionary#fetchWordOfTheDay()</code>&#8201;&#8212;&#8201;Parses the word of the day and its meaning from the Document object returned by <code>doesWordOfTheDayExist()</code> and returns itself (Dictionary object).</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Below is a description on how the Word Of The Day function operates:</p>
-</div>
-<div class="paragraph">
-<p>Step 1: User cannot think of a word so he/she wants to display the word of the day on Dictionary.com.</p>
-</div>
-<div class="paragraph">
-<p>Step 2: User would make sure that there is a working internet connection.</p>
-</div>
-<div class="paragraph">
-<p>Step 3: User would type "word" into the command line.</p>
-</div>
-<div class="paragraph">
-<p>Step 4: The word of the day will be fetched online. Should it be successful, the word of the day and its meaning will be displayed.</p>
+<p>REMOVED IMPLEMENTATIONS AND ADDED ABOVE AT 3.</p>
 </div>
 </div>
 </div>
@@ -2854,4 +2865,4 @@ High (Need to have) - PPP, Medium (Nice to have) - PP, Low (Not very needed) - P
 </tbody>
 </table>
 </div>
-</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-11-08 04:16:48 UTC</div></div></div></body></html>
+</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-11-08 14:03:36 UTC</div></div></div></body></html>
