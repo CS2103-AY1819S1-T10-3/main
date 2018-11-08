@@ -176,7 +176,7 @@ Format: <code>edit INDEX [n/NAME] [m/MEANING] [t/TAG]&#8230;&#8203;</code></p>
 <p>Edits the word at the specified <code>INDEX</code>. The index refers to the index number shown in the displayed vocabulary list. The index <strong>must be a positive integer</strong> 1, 2, 3, &#8230;&#8203;</p>
 </li>
 <li>
-<p>At least one of the optional fields must be provided.</p>
+<p>Name and Meaning class must have their fields filled in eg: <code>add n/hello m/a greeting</code>.</p>
 </li>
 <li>
 <p>Existing values will be updated to the input values.</p>
@@ -185,7 +185,7 @@ Format: <code>edit INDEX [n/NAME] [m/MEANING] [t/TAG]&#8230;&#8203;</code></p>
 <p>When editing tags, the existing tags of the word will be removed i.e adding of tags is not cumulative.</p>
 </li>
 <li>
-<p>You can remove all the person&#8217;s tags by typing <code>t/</code> without specifying any tags after it.</p>
+<p>There will be at least one tag to each word, so it is enforced that no edits allow for 0 tags per word.</p>
 </li>
 </ul>
 </div>
@@ -492,6 +492,10 @@ Selects the 1st word in the results of the <code>find</code> command.</p>
 <p>Moreover, the first sequence number will be selected automatically. If there are no existing words that are found,
 the default display would be the last displayed placeholder page.</p>
 </div>
+<div class="paragraph">
+<p>However, user should note that showing a word not present would not result in any changes to the Ui as it is not intended, it
+will still continue to display the previous word being selected in the panel on the right.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="trivia-game-code-trivia-code"><a class="link" href="#trivia-game-code-trivia-code">Trivia game: <code>trivia</code></a></h3>
@@ -647,4 +651,4 @@ Format: <code>exit</code></p>
 </div>
 </div>
 </div>
-</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-11-08 14:03:36 UTC</div></div></div></body></html>
+</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-11-08 19:11:06 UTC</div></div></div></body></html>

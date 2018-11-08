@@ -31,8 +31,9 @@
 <ul class="sectlevel2">
 <li><a href="#undo-redo-feature">3.1. Undo/Redo feature</a></li>
 <li><a href="#learn-feature">3.2. Learn feature</a></li>
-<li><a href="#logging">3.3. Logging</a></li>
-<li><a href="#Implementation-Configuration">3.4. Configuration</a></li>
+<li><a href="#basic-features">3.3. Basic features</a></li>
+<li><a href="#logging">3.4. Logging</a></li>
+<li><a href="#Implementation-Configuration">3.5. Configuration</a></li>
 </ul>
 </li>
 <li><a href="#documentation">4. Documentation</a>
@@ -832,31 +833,22 @@ Additionally, it implements the following operations:</p>
 <p>Given below is an example usage scenario and how the learn mechanism behaves at each step.</p>
 </div>
 <div class="paragraph">
-<p>Step 1. The user launches the application for the first time. The user types in <code>learn beautiful</code> into the CLI.</p>
+<p>Step 1. The user launches the application for the first time. The user types in <code>learn magic</code> into the CLI.</p>
 </div>
 <div class="paragraph">
-<p>There was a discussion to have an "Offline" version of the dictionary so that we can better attend to the tests, especially since it might be an offline environment.</p>
+<p>Step 2. <code>learn magic</code> will be parsed by LearnVocabularyParser, where the <code>learn</code> command will be triggered, calling <code>LearnCommandParser#parse()</code>.</p>
 </div>
 <div class="paragraph">
-<p>However, due to the lack of resources online and the fact that the API for dictionary only allows for 250 queries, we opted to do the online version instead.</p>
+<p>Step 3. This in turn calls <code>Dictionary</code> class and all of its relevant operations, starting with <code>Dictionary#invoke()</code>.</p>
 </div>
 <div class="paragraph">
-<p>It is great to also note that a fresh new copy would give the user access to a few preconfigured words at the disposal of the user.</p>
+<p>Step 4. The word <code>magic</code> will be checked against the model and the current LearnVocabulary to see if they hold the same exact word.</p>
 </div>
 <div class="paragraph">
-<p>Functions added:</p>
+<p>Step 4a. The word does not exist and will be stored, together with the meaning that was queried as a result of <code>Dictionary#invoke()</code>.</p>
 </div>
 <div class="paragraph">
-<p>Below is a description on how the learn function operates:</p>
-</div>
-<div class="paragraph">
-<p>Step 1: User wants to learn this new word he just heard of, eg: Happiness</p>
-</div>
-<div class="paragraph">
-<p>Step 2: User would type the word followed by the command learn, eg: learn happiness</p>
-</div>
-<div class="paragraph">
-<p>Step 3: The word will be searched online, should it be successful, the word and meaning will be displayed on screen.</p>
+<p>Step 4b. The word already exists and the command will throw a Duplicate Word Exception.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -871,10 +863,169 @@ The newly queried word would be attached with a "toLearn" tag, which allows the 
 </table>
 </div>
 <div class="paragraph">
-<p>Step 4: The word is then stored within the storage file.</p>
+<p>Step 5. The word, meaning will be assigned a default tag and be displayed in the Command Box.</p>
 </div>
 <div class="paragraph">
-<p><em>{Explain here how the data encryption feature will be implemented}</em></p>
+<p>The following sequence diagram shows how the learn command works:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/LearnSequenceDiagram.png" alt="LearnSequenceDiagram" width="820">
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="design-considerations-2"><a class="link" href="#design-considerations-2">3.2.2. Design Considerations</a></h4>
+<div class="sect4">
+<h5 id="aspect-how-words-are-queried-in-dictionary"><a class="link" href="#aspect-how-words-are-queried-in-dictionary">Aspect: How Words are queried in Dictionary</a></h5>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Alternative 1 (current choice):</strong> Online querying of every word being learned.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Pros: Easy to implement and change (in the future) to accommodate extra meanings.</p>
+</li>
+<li>
+<p>Cons: Requires the use of Internet Connection.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Alternative 2:</strong> Offline querying of every word being learned.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Pros: Does not require Internet to query word.</p>
+</li>
+<li>
+<p>Cons: Untested, but a corrupt xml file would be disastrous causing corrupt findings, memory space will be an issue as well.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="aspect-how-words-are-stored-in-dictionary"><a class="link" href="#aspect-how-words-are-stored-in-dictionary">Aspect: How Words are stored in Dictionary</a></h5>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Alternative 1</strong> (current choice): Offline storage of every word being learned.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Pros: Easy to implement and does not require the use of a cloud storage.</p>
+</li>
+<li>
+<p>Cons: Not mobile and accessible to the user</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Alternative 2:</strong> Online storage of every word being learned.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Pros: Mobile access by the user on the go.</p>
+</li>
+<li>
+<p>Cons: Will consume a lot of resources. Might not be necessary.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="basic-features"><a class="link" href="#basic-features">3.3. Basic features</a></h3>
+<div class="sect3">
+<h4 id="current-implementation-3"><a class="link" href="#current-implementation-3">3.3.1. Current Implementation</a></h4>
+<div class="paragraph">
+<p>Improved from the previous versions, the <code>Add</code> and <code>Edit</code> commands have been refined in LearnVocabulary.
+There is also a minor feature added <code>Show</code>, which displays a filtered word list on the Ui.</p>
+</div>
+<div class="sect4">
+<h5 id="add-command-improvements"><a class="link" href="#add-command-improvements">Add command improvements</a></h5>
+<div class="paragraph">
+<p>When adding a new word to LearnVocabulary, only the <code>Name</code> and <code>Meaning</code> fields must be entered as follows: <code>add n/fire m/something hot</code>.
+As can be seen from the example given, there is no <code>Tag</code> being entered at all. However, LearnVocabulary will enforce that every word would
+require at least one tag. As such, the default tag "toLearn" will be given to words without any tags at the start.</p>
+</div>
+<div class="paragraph">
+<p>Given below is an example usage scenario and how the add mechanism behaves at each step.</p>
+</div>
+<div class="paragraph">
+<p>Step 1. The user launches the application for the first time. The user types in <code>add n/fire m/something hot</code> into the CLI.</p>
+</div>
+<div class="paragraph">
+<p>Step 2. <code>add n/fire m/something hot</code> will be parsed by LearnVocabularyParser, where the <code>add</code> command will be triggered, calling <code>AddCommandParser#parse()</code>.</p>
+</div>
+<div class="paragraph">
+<p>Step 3a. Illegal characters will cause the command to throw an exception and await a new command.</p>
+</div>
+<div class="paragraph">
+<p>Step 3b. The word with all letters being parsed will be checked against LearnVocabulary to ensure no duplicate words.</p>
+</div>
+<div class="paragraph">
+<p>Step 4. The word will have a "toLearn" tag attached and be added to LearnVocabulary after ensuring that there are no duplicates.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="edit-command-improvements"><a class="link" href="#edit-command-improvements">Edit command improvements</a></h5>
+<div class="paragraph">
+<p>When editing an existing word in LearnVocabulary, there cannot be empty tags for any words provided.</p>
+</div>
+<div class="paragraph">
+<p>Given below is an example usage scenario and how the edit mechanism behaves at each step.</p>
+</div>
+<div class="paragraph">
+<p>Step 1. The user types in <code>edit 1 t/</code> which shows the user wanting to clear all tags from existing word.</p>
+</div>
+<div class="paragraph">
+<p>Step 2. The command box outputs that it is not possible, at least one tag must be attached to the word.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="show-feature"><a class="link" href="#show-feature">Show feature</a></h5>
+<div class="paragraph">
+<p>The <code>show</code> command is an improvement in leaps and bounds ahead of the <code>find</code> command, but it exists as a separate command on its own due to its nature.
+Simply put, when entering <code>show fire magic life</code>, it will display the 3 words on the Ui and automatically outputs
+the word, meaning and tags onto the Command Box. The first word from the list will also be automatically selected.</p>
+</div>
+<div class="paragraph">
+<p>As such, <code>Show</code> was implemented with a more Ui state of mind, to ensure the user&#8217;s ease of use when finding the words for display of their meanings as AddressBook level 4 did not cater to this particular arrangement.</p>
+</div>
+<div class="paragraph">
+<p>Given below is an example usage scenario and how the show mechanism behaves at each step.</p>
+</div>
+<div class="paragraph">
+<p>Step 1. The user types in <code>show fire magic life</code>, it will display the 3 words in the order that they had in the list.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Multiple words are allowed to be queried. This allows for more flexibility compared to the Ui option.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Step 2. On the left, we have the filtered list of words. On the right we have the automatically selected first word from the list.</p>
+</div>
+<div class="paragraph">
+<p>Step 3. The 3 words will appear in the Command Box as well.</p>
 </div>
 <div class="paragraph">
 <p><strong>Trivia:</strong></p>
@@ -1045,45 +1196,6 @@ Attempting to call the <code>answer</code> command without first calling <code>t
 <p>Step 3: If the user set a group name that does not exist, the system throw an exception. Otherwise it deletes the assigned group. Especially, for those words which exist in this only deleted group, those words would also be deleted automately.</p>
 </div>
 <div class="paragraph">
-<p><strong>Show implementation</strong></p>
-</div>
-<div class="paragraph">
-<p>The show command is indicated as <code>Show</code> in <code>commands</code>, and inherits the <code>Command</code> class. It is a more advanced version of <code>Find</code> in a sense that it displays the word&#8217;s definition on the Ui screen page. The reason why this was created and <code>Find</code> was left alone was because we wanted to have more abstraction in terms of code.</p>
-</div>
-<div class="paragraph">
-<p>As for <code>find</code>, perhaps the team and I can find another purpose for it.</p>
-</div>
-<div class="paragraph">
-<p>As such, <code>Show</code> was implemented with a more Ui state of mind, to ensure the user&#8217;s ease of use when finding the words for display of their meanings as AddressBook level 4 did not cater to this particular arrangement.</p>
-</div>
-<div class="paragraph">
-<p>Moreover, it also encompasses multiple words, which meant that users can always pick and dump a whole bunch of words and it will filter out as needed, accordingly.</p>
-</div>
-<div class="paragraph">
-<p>Below is a description on how the select function operates:</p>
-</div>
-<div class="paragraph">
-<p>Step 1: User wants to query a bunch of words and find out their meanings, tags altogether.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Multiple words are allowed to be queried. This allows for more flexibility compared to the Ui option.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Step 2: <code>ShowCommand</code> checks through the entire xml file of LearnVocabulary and filters out the ones that were keyed in.</p>
-</div>
-<div class="paragraph">
-<p>Step 3: The result is the list of filtered words, together with their definition and tags being displayed.</p>
-</div>
-<div class="paragraph">
 <p><strong>Word Of The Day</strong></p>
 </div>
 <div class="paragraph">
@@ -1119,15 +1231,16 @@ Multiple words are allowed to be queried. This allows for more flexibility compa
 </div>
 </div>
 </div>
+</div>
 <div class="sect2">
-<h3 id="logging"><a class="link" href="#logging">3.3. Logging</a></h3>
+<h3 id="logging"><a class="link" href="#logging">3.4. Logging</a></h3>
 <div class="paragraph">
 <p>We are using <code>java.util.logging</code> package for logging. The <code>LogsCenter</code> class is used to manage the logging levels and logging destinations.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>The logging level can be controlled using the <code>logLevel</code> setting in the configuration file (See <a href="#Implementation-Configuration">Section 3.4, &#8220;Configuration&#8221;</a>)</p>
+<p>The logging level can be controlled using the <code>logLevel</code> setting in the configuration file (See <a href="#Implementation-Configuration">Section 3.5, &#8220;Configuration&#8221;</a>)</p>
 </li>
 <li>
 <p>The <code>Logger</code> for a class can be obtained using <code>LogsCenter.getLogger(Class)</code> which will log messages according to the specified logging level</p>
@@ -1158,7 +1271,7 @@ Multiple words are allowed to be queried. This allows for more flexibility compa
 </div>
 </div>
 <div class="sect2">
-<h3 id="Implementation-Configuration"><a class="link" href="#Implementation-Configuration">3.4. Configuration</a></h3>
+<h3 id="Implementation-Configuration"><a class="link" href="#Implementation-Configuration">3.5. Configuration</a></h3>
 <div class="paragraph">
 <p>Certain properties of the application can be controlled (e.g App name, logging level) through the configuration file (default: <code>config.json</code>).</p>
 </div>
@@ -2865,4 +2978,4 @@ High (Need to have) - PPP, Medium (Nice to have) - PP, Low (Not very needed) - P
 </tbody>
 </table>
 </div>
-</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-11-08 14:03:36 UTC</div></div></div></body></html>
+</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-11-08 19:11:06 UTC</div></div></div></body></html>
