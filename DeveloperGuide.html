@@ -962,6 +962,35 @@ The groupadd command is indicated as <code>groupadd</code> in <code>commands</co
 <div class="paragraph">
 <p>Given below is an example usage scenario and how the groupadd functionality behaves at each step.</p>
 </div>
+<div class="paragraph">
+<p>Step 1: User calls “groupadd + [groupname]” where <code>groupname</code> is the name of the newly added group.</p>
+</div>
+<div class="paragraph">
+<p>Step 2: <code>GroupAddCommand</code> checks passed arguments.</p>
+</div>
+<div class="paragraph">
+<p>Step 3: If the user set a group name that has already existed, the system do nothing(no dublicate). Otherwise it creates a new group.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="groupdelete-functionality-implementation"><a class="link" href="#groupdelete-functionality-implementation">groupdelete functionality implementation</a></h5>
+<div class="paragraph">
+<p>Similar to the other existed functionalities, the groupdelete functionality mainly consists of a groupdeleteCommandParser and a groupdeleteCommand.
+The groupdelete parser is indicated as <code>groupdeleteCommand</code> in <code>parsers</code>, and inherits the <code>Parser</code> class. It enables the application to handle the input given by the the user.
+The groupdelete command is indicated as <code>groupdelete</code> in <code>commands</code>, and inherits the <code>Command</code> class. It handles a valid group name input and enables the user to "delete" a word group and all the words inside.</p>
+</div>
+<div class="paragraph">
+<p>Given below is an example usage scenario and how the groupadd functionality behaves at each step.</p>
+</div>
+<div class="paragraph">
+<p>Step 1: User calls “groupdelete + [groupname]” where <code>groupname</code> is the name of the desired deleted group.</p>
+</div>
+<div class="paragraph">
+<p>Step 2: <code>GroupDeleteCommand</code> checks passed arguments.</p>
+</div>
+<div class="paragraph">
+<p>Step 3: If the user set a group name that does not exist, the system throw an exception. Otherwise it deletes the assigned group. Especially, for those words which exist in this only deleted group, those words would also be deleted automately.</p>
+</div>
 </div>
 </div>
 </div>
@@ -1179,42 +1208,6 @@ Attempting to call the <code>answer</code> command without first calling <code>t
 </div>
 <div class="paragraph">
 <p>Step 3: If the user leaves out or in other ways enters an invalid index, <code>SelectCommand</code> throws an exception. Otherwise it returns the desired word.</p>
-</div>
-<div class="paragraph">
-<p><strong>groupadd</strong></p>
-</div>
-<div class="paragraph">
-<p>The select command is indicated as <code>GroupAddCommand</code> in <code>commands</code>, and inherits the <code>Command</code> class. It create a new group in which the uesr can put words.</p>
-</div>
-<div class="paragraph">
-<p>Below is a description on how the select function operates:</p>
-</div>
-<div class="paragraph">
-<p>Step 1: User calls “groupadd + [groupname]” where <code>groupname</code> is the name of the newly added group.</p>
-</div>
-<div class="paragraph">
-<p>Step 2: <code>GroupAddCommand</code> checks passed arguments.</p>
-</div>
-<div class="paragraph">
-<p>Step 3: If the user set a group name that has already existed, the system do nothing(no dublicate). Otherwise it creates a new group.</p>
-</div>
-<div class="paragraph">
-<p><strong>groupdelete</strong></p>
-</div>
-<div class="paragraph">
-<p>The select command is indicated as <code>GroupDeleteCommand</code> in <code>commands</code>, and inherits the <code>Command</code> class. It delete a group and all words in it.</p>
-</div>
-<div class="paragraph">
-<p>Below is a description on how the select function operates:</p>
-</div>
-<div class="paragraph">
-<p>Step 1: User calls “groupdelete + [groupname]” where <code>groupname</code> is the name of the desired deleted group.</p>
-</div>
-<div class="paragraph">
-<p>Step 2: <code>GroupDeleteCommand</code> checks passed arguments.</p>
-</div>
-<div class="paragraph">
-<p>Step 3: If the user set a group name that does not exist, the system throw an exception. Otherwise it deletes the assigned group. Especially, for those words which exist in this only deleted group, those words would also be deleted automately.</p>
 </div>
 <div class="paragraph">
 <p><strong>Word Of The Day</strong></p>
@@ -2999,4 +2992,4 @@ High (Need to have) - PPP, Medium (Nice to have) - PP, Low (Not very needed) - P
 </tbody>
 </table>
 </div>
-</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-11-09 02:37:44 UTC</div></div></div></body></html>
+</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-11-09 02:41:20 UTC</div></div></div></body></html>
