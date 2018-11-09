@@ -967,10 +967,18 @@ The groupadd command is indicated as <code>Groupadd</code> in <code>commands</co
 <p>Step 1: User calls “groupadd + [groupname]” where <code>groupname</code> is the name of the newly added group.</p>
 </div>
 <div class="paragraph">
-<p>Step 2: <code>GroupAddCommand</code> checks passed arguments.</p>
+<p>Step 2: <code>GroupAddCommandParser</code> checks the validity of the groupname, trim the given groupname and create the GroupaddCommand.</p>
 </div>
 <div class="paragraph">
-<p>Step 3: If the user set a group name that has already existed, the system do nothing(no dublicate). Otherwise it creates a new group.</p>
+<p>Step 3a: If the user set a group name that has already existed, the system throws an exception to the user to indicate that the group name has existed.</p>
+</div>
+<div class="paragraph">
+<p>Step 3b: Otherwise it lets the model component to add the group with given groupname.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/groupaddSequentialDiagram.jpg" alt="groupaddSequentialDiagram" width="820">
+</div>
 </div>
 </div>
 <div class="sect4">
@@ -987,10 +995,21 @@ The groupdelete command is indicated as <code>Groupdelete</code> in <code>comman
 <p>Step 1: User calls “groupdelete + [groupname]” where <code>groupname</code> is the name of the desired deleted group.</p>
 </div>
 <div class="paragraph">
-<p>Step 2: <code>GroupDeleteCommand</code> checks passed arguments.</p>
+<p>Step 2: <code>GroupDeleteCommandParser</code> checks the validity of the groupname, trim the given groupname and create the GroupdeleteCommand.</p>
 </div>
 <div class="paragraph">
-<p>Step 3: If the user set a group name that does not exist, the system throw an exception. Otherwise it deletes the assigned group. Especially, for those words which exist in this only deleted group, those words would also be deleted automately.</p>
+<p>Step 3: <code>GroupDeleteCommand</code> checks passed arguments.</p>
+</div>
+<div class="paragraph">
+<p>Step 4a: If the user set a group name that does not exist, the system throw an exception to indicate that the desired deleted group does not exist.</p>
+</div>
+<div class="paragraph">
+<p>step 4b: Otherwise it lets the model component to delete the group with given groupname. Especially, for those words which exist in this only deleted group, those words would also be deleted automately.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/groupdeleteSequentialDiagram.jpg" alt="groupdeleteSequentialDiagram" width="820">
+</div>
 </div>
 </div>
 <div class="sect4">
@@ -1001,16 +1020,47 @@ The showgroup parser is indicated as <code>ShowGroupCommand</code> in <code>pars
 The showgroup command is indicated as <code>ShowGroup</code> in <code>commands</code>, and inherits the <code>Command</code> class. It handles a valid group name input and enables the user to either see all the existing groups or open a selected word group and see all the words inside.</p>
 </div>
 <div class="paragraph">
-<p>Given below is an example usage scenario and how the showgroup functionality behaves at each step.</p>
+<p>Given below are two example usage scenarios and how the showgroup functionality behaves at each step.</p>
+</div>
+<div class="sect5">
+<h6 id="example-a"><a class="link" href="#example-a">Example a</a></h6>
+<div class="paragraph">
+<p>Step 1: User calls “showgroup + [groupname]” where <code>groupname</code> is the name of the desired checked group.</p>
 </div>
 <div class="paragraph">
-<p>Step 1: User calls “groupdelete + [groupname]” where <code>groupname</code> is the name of the desired deleted group.</p>
+<p>Step 2: <code>ShowGroupCommandParser</code> checks the validity of the groupname, trims the given groupname and create the ShowGroupCommand.</p>
 </div>
 <div class="paragraph">
-<p>Step 2: <code>GroupDeleteCommand</code> checks passed arguments.</p>
+<p>Step 3: <code>ShowgroupCommand</code> checks passed arguments.</p>
 </div>
 <div class="paragraph">
-<p>Step 3: If the user set a group name that does not exist, the system throw an exception. Otherwise it deletes the assigned group. Especially, for those words which exist in this only deleted group, those words would also be deleted automately.</p>
+<p>Step 4a: If the user set a group name that does not exist, the system throw an exception to indicate that the desired checked group does not exist.</p>
+</div>
+<div class="paragraph">
+<p>Step 4b: Otherwise it lets the model component to update the groupname as the predicate in the filterList.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/showgroupSequentialDiagram2.jpg" alt="showgroupSequentialDiagram2" width="820">
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="example-b"><a class="link" href="#example-b">Example b</a></h6>
+<div class="paragraph">
+<p>Step 1: User calls “showgroup”.</p>
+</div>
+<div class="paragraph">
+<p>Step 2: <code>ShowGroupCommandParser</code> creates the ShowGroupCommand.</p>
+</div>
+<div class="paragraph">
+<p>Step 3: <code>ShowGroupCommand</code> gets all the existing groupname from the model by calling getTags() and show these groupnames to the user.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/showgroupSequentialDiagram1.jpg" alt="showgroupSequentialDiagram1" width="820">
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1181,6 +1231,9 @@ While in trivia mode, every command the user types will be parsed as <code>Trivi
 <div class="paragraph">
 <p>Step 5. <code>TriviaCommand.execute()</code> calls <code>Model.getTrivia()</code> and outputs to the user.</p>
 </div>
+<div class="paragraph">
+<p>Below shows a sequence diagram of how the trivia feature works.</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="images/TriviaSequenceDiagram.png" alt="TriviaSequenceDiagram" width="820">
@@ -1232,6 +1285,14 @@ If the user inputs <code>triviaExit</code> or <code>triviaShow</code>, the input
 <p>Step 4: Outputs a correct or wrong message based on the result in step 3.</p>
 </div>
 <div class="paragraph">
+<p>Below shows a sequence diagram of how the answer feature works.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/TriviaAnsSequenceDiagram.png" alt="TriviaAnsSequenceDiagram" width="820">
+</div>
+</div>
+<div class="paragraph">
 <p><strong>Select</strong></p>
 </div>
 <div class="paragraph">
@@ -1248,11 +1309,6 @@ If the user inputs <code>triviaExit</code> or <code>triviaShow</code>, the input
 </div>
 <div class="paragraph">
 <p>Step 3: If the user leaves out or in other ways enters an invalid index, <code>SelectCommand</code> throws an exception. Otherwise it returns the desired word.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="images/TriviaAnsSequenceDiagram.png" alt="TriviaAnsSequenceDiagram" width="820">
-</div>
 </div>
 <div class="paragraph">
 <p><strong>Word Of The Day</strong></p>
@@ -3035,4 +3091,4 @@ High (Need to have) - PPP, Medium (Nice to have) - PP, Low (Not very needed) - P
 </tbody>
 </table>
 </div>
-</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-11-09 10:02:12 UTC</div></div></div></body></html>
+</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-11-09 10:50:32 UTC</div></div></div></body></html>
