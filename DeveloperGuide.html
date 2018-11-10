@@ -34,8 +34,9 @@
 <li><a href="#group-features">3.3. Group features</a></li>
 <li><a href="#basic-features">3.4. Basic features</a></li>
 <li><a href="#trivia-feature">3.5. Trivia feature</a></li>
-<li><a href="#logging">3.6. Logging</a></li>
-<li><a href="#Implementation-Configuration">3.7. Configuration</a></li>
+<li><a href="#wordoftheday-feature">3.6. WordOfTheDay feature</a></li>
+<li><a href="#logging">3.7. Logging</a></li>
+<li><a href="#Implementation-Configuration">3.8. Configuration</a></li>
 </ul>
 </li>
 <li><a href="#documentation">4. Documentation</a>
@@ -1351,14 +1352,16 @@ If the user inputs <code>triviaExit</code> or <code>triviaShow</code>, the input
 <div class="paragraph">
 <p>Step 3: If the user leaves out or in other ways enters an invalid index, <code>SelectCommand</code> throws an exception. Otherwise it returns the desired word.</p>
 </div>
-<div class="paragraph">
-<p><strong>Word Of The Day</strong></p>
 </div>
+<div class="sect2">
+<h3 id="wordoftheday-feature"><a class="link" href="#wordoftheday-feature">3.6. WordOfTheDay feature</a></h3>
+<div class="sect3">
+<h4 id="current-implementation-5"><a class="link" href="#current-implementation-5">3.6.1. Current Implementation</a></h4>
 <div class="paragraph">
 <p>The Word Of The Day command is indicated as <code>WordOfTheDay</code> in <code>commands</code>, and inherits the <code>Command</code> class. It enables the user to display the current word of the day taken from website Dictionary.com. Similarly to the "learn" command, this command also requires a working internet connection. It is impossible to make this feature available offline since the word of the day cannot be predicted on Dictionary.com</p>
 </div>
 <div class="paragraph">
-<p>Functions added:</p>
+<p>The Word Of The Day command utilizes the same functions in the Dictionary class made for the 'LearnCommand', but also adds the following functions:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1369,6 +1372,9 @@ If the user inputs <code>triviaExit</code> or <code>triviaShow</code>, the input
 <p><code>Dictionary#fetchWordOfTheDay()</code>&#8201;&#8212;&#8201;Parses the word of the day and its meaning from the Document object returned by <code>doesWordOfTheDayExist()</code> and returns itself (Dictionary object).</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>Dictionary#fetchWordOfTheDay() is used in the WordOfTheDayParser class as WordOfTheDayParser#parse(), while all the other executions are self-contained within the Dictionary#fetchWordOfTheDay() function.</p>
 </div>
 <div class="paragraph">
 <p>Below is a description on how the Word Of The Day function operates:</p>
@@ -1383,18 +1389,45 @@ If the user inputs <code>triviaExit</code> or <code>triviaShow</code>, the input
 <p>Step 3: User would type "word" into the command line.</p>
 </div>
 <div class="paragraph">
-<p>Step 4: The word of the day will be fetched online. Should it be successful, the word of the day and its meaning will be displayed.</p>
+<p>Step 4: The word of the day will be parsed by WordOfTheDayParser, calling <code>WordOfTheDayParser#parse()</code> The WordOfTheDayParser exists solely for the purpose of utilizing the existing functions made for parsing the online Dictionary and putting the word into a <code>Word</code> object.</p>
+</div>
+<div class="paragraph">
+<p>Step 5: This calls the <code>Dictionary</code> class and all relevant functions. The first one being <code>Dictionary#fetchWordOfTheDay()</code>.</p>
+</div>
+<div class="paragraph">
+<p>Step 6: The Word Of The Day will be fetched online from Dictionary.com and displayed by the WordOfTheDayCommand together with its meaning. Should the internet-connection fail, the operation throws a <code>MESSAGE_NO_INTERNET</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The Word Of The Day is displayed together with a "WordOfTheDay" tag. The word and the tag are not stored in any group somewhere, but is only displayed for the user. If the user wants to learn the word, he or she shall use the LearnCommand.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The following sequence diagram shows how the Word Of The Day command works:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/WordOfTheDaySequentialDiagram.jpg" alt="WordOfTheDaySequentialDiagram" width="820">
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="logging"><a class="link" href="#logging">3.6. Logging</a></h3>
+<h3 id="logging"><a class="link" href="#logging">3.7. Logging</a></h3>
 <div class="paragraph">
 <p>We are using <code>java.util.logging</code> package for logging. The <code>LogsCenter</code> class is used to manage the logging levels and logging destinations.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>The logging level can be controlled using the <code>logLevel</code> setting in the configuration file (See <a href="#Implementation-Configuration">Section 3.7, &#8220;Configuration&#8221;</a>)</p>
+<p>The logging level can be controlled using the <code>logLevel</code> setting in the configuration file (See <a href="#Implementation-Configuration">Section 3.8, &#8220;Configuration&#8221;</a>)</p>
 </li>
 <li>
 <p>The <code>Logger</code> for a class can be obtained using <code>LogsCenter.getLogger(Class)</code> which will log messages according to the specified logging level</p>
@@ -1425,7 +1458,7 @@ If the user inputs <code>triviaExit</code> or <code>triviaShow</code>, the input
 </div>
 </div>
 <div class="sect2">
-<h3 id="Implementation-Configuration"><a class="link" href="#Implementation-Configuration">3.7. Configuration</a></h3>
+<h3 id="Implementation-Configuration"><a class="link" href="#Implementation-Configuration">3.8. Configuration</a></h3>
 <div class="paragraph">
 <p>Certain properties of the application can be controlled (e.g App name, logging level) through the configuration file (default: <code>config.json</code>).</p>
 </div>
@@ -2314,4 +2347,4 @@ Expected: Similar to previous.</p>
 </div>
 </div>
 </div>
-</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-11-10 01:41:43 UTC</div></div></div></body></html>
+</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-11-10 09:51:00 UTC</div></div></div></body></html>
