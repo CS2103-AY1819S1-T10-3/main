@@ -75,6 +75,10 @@
 <ul class="sectlevel2">
 <li><a href="#launch-and-shutdown">F.1. Launch and Shutdown</a></li>
 <li><a href="#deleting-a-word">F.2. Deleting a word</a></li>
+<li><a href="#learning-a-word">F.3. Learning a word</a></li>
+<li><a href="#showing-a-word">F.4. Showing a word</a></li>
+<li><a href="#adding-a-word">F.5. Adding a word</a></li>
+<li><a href="#editing-a-word">F.6. Editing a word</a></li>
 </ul>
 </li>
 </ul>
@@ -2382,5 +2386,117 @@ Expected: Similar to previous.</p>
 </ol>
 </div>
 </div>
+<div class="sect2">
+<h3 id="learning-a-word"><a class="link" href="#learning-a-word">F.3. Learning a word</a></h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Learning a word from Dictionary.com</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Prerequisites: Ensure Internet Connection is established.</p>
+</li>
+<li>
+<p>Test case: <code>learn potato</code><br>
+Expected: The word <code>potato</code> is added to LearnVocabulary, together with its definition and a default tag <code>toLearn</code>. Details of the learnt word shown in the status message. Timestamp in the status bar is updated.</p>
+</li>
+<li>
+<p>Test case: <code>learn !potato</code><br>
+Expected: No word is learnt. Error details shown in the status message. Status bar remains the same.</p>
+</li>
+<li>
+<p>Other incorrect learn commands to try: <code>learn</code>, <code>learn x</code>, <code>learn 1</code>, <code>learn notarealword</code><br>
+Expected: Similar to previous.</p>
+</li>
+</ol>
 </div>
-</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-11-11 14:56:58 UTC</div></div></div></body></html>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="showing-a-word"><a class="link" href="#showing-a-word">F.4. Showing a word</a></h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Showing a word from LearnVocabulary&#8217;s list.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Prerequisites: List all words using the <code>list</code> command. Multiple words in the list.</p>
+</li>
+<li>
+<p>Test case: <code>show potato</code><br>
+Expected: The word <code>potato</code> is filtered and returned inside LearnVocabulary, together with its definition and tags attached to it. Details of the word is shown in the status message. Timestamp in the status bar is updated.</p>
+</li>
+<li>
+<p>Test case: <code>show potato gravy happy</code><br>
+Expected: The words <code>potato</code>, <code>gravy</code>, <code>happy</code> are filtered and returned inside LearnVocabulary, together with their definitions and tags attached to it. Details of the words are shown in the status message. Timestamp in the status bar is updated.</p>
+</li>
+<li>
+<p>Test case: <code>show</code><br>
+Expected: No word is shown. Error details shown in the status message. Status bar remains the same. Display remains the same.</p>
+</li>
+<li>
+<p>Other incorrect learn commands to try: <code>show 1</code>, <code>show x</code>, <code>show !potato</code>, <code>show notarealword</code><br>
+Expected: Similar to previous. Except now, filtered list is empty.</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="adding-a-word"><a class="link" href="#adding-a-word">F.5. Adding a word</a></h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Adding a word to LearnVocabulary&#8217;s list.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Prerequisites: Word must not have been added to LearnVocabulary.</p>
+</li>
+<li>
+<p>Test case: <code>add n/potato m/type of starch</code><br>
+Expected: The word <code>potato</code> is added inside LearnVocabulary, together with its definition and default tag <code>toLearn</code> attached to it. Details of the word is shown in the status message. Timestamp in the status bar is updated.</p>
+</li>
+<li>
+<p>Test case: <code>add n/potato</code><br>
+Expected: The word potato will not be added inside LearnVocabulary, because meaning field is missing. Error details shown in the status message. Status bar remains the same. Display remains the same.</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="editing-a-word"><a class="link" href="#editing-a-word">F.6. Editing a word</a></h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Editing a word in LearnVocabulary&#8217;s list.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Prerequisites: List must be non-empty.</p>
+</li>
+<li>
+<p>Test case: <code>edit 1 m/something lightweight</code><br>
+Expected: The word <code>potato</code> in index 1 will have its meaning changed from its existing meaning to its new definition "something lightweight". Details of the word is shown in the status message. Timestamp in the status bar is updated.</p>
+</li>
+<li>
+<p>Test case: <code>edit n/potato t/</code><br>
+Expected: The word potato will not be edited inside LearnVocabulary, because tag field is missing, it is enforced that there can no longer be any words that have 1 tag. Error details shown in the status message. Status bar remains the same. Display remains the same.</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-11-11 15:18:52 UTC</div></div></div></body></html>
