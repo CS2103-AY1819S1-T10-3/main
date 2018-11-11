@@ -541,7 +541,7 @@ The newly queried word would be attached with a "toLearn" tag, which allows the 
 </div>
 </div>
 <div class="sect2">
-<h3 id="learning-a-word"><a class="link" href="#learning-a-word">Learning a word</a></h3>
+<h3 id="learning-a-word-manual-testing"><a class="link" href="#learning-a-word-manual-testing">Learning a word (Manual Testing)</a></h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -602,6 +602,20 @@ require at least one tag. As such, the default tag "toLearn" will be given to wo
 <div class="paragraph">
 <p>Step 4. The word will have a "toLearn" tag attached and be added to LearnVocabulary after ensuring that there are no duplicates.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Each tag being added follows AB4&#8217;s implementation, separate tags are considered via <code>t/</code><br>
+So, <code>t/happy</code>, <code>t/emotions</code>, <code>t/sad</code> is considered 3 tags and they MUST have already been added via <code>groupadd</code>.<br>
+Tags will not be added as a whole if any of them do not exist.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect4">
 <h5 id="edit-command-improvements"><a class="link" href="#edit-command-improvements">Edit command improvements</a></h5>
@@ -616,6 +630,20 @@ require at least one tag. As such, the default tag "toLearn" will be given to wo
 </div>
 <div class="paragraph">
 <p>Step 2. The command box outputs that it is not possible, at least one tag must be attached to the word.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Each tag being added follows AB4&#8217;s implementation, separate tags are considered via <code>t/</code><br>
+So, <code>t/happy</code>, <code>t/emotions</code>, <code>t/sad</code> is considered 3 tags and they MUST have already been added via <code>groupadd</code>.
+Tags will not be added as a whole if any of them do not exist.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect4">
@@ -656,7 +684,7 @@ Multiple words are allowed to be queried. This allows for more flexibility compa
 </div>
 </div>
 <div class="sect2">
-<h3 id="showing-a-word"><a class="link" href="#showing-a-word">Showing a word</a></h3>
+<h3 id="showing-a-word-manual-testing"><a class="link" href="#showing-a-word-manual-testing">Showing a word (Manual Testing)</a></h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -689,7 +717,7 @@ Expected: Similar to previous. Except now, filtered list is empty.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="adding-a-word"><a class="link" href="#adding-a-word">Adding a word</a></h3>
+<h3 id="adding-a-word-manual-testing"><a class="link" href="#adding-a-word-manual-testing">Adding a word (Manual Testing)</a></h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -714,7 +742,7 @@ Expected: The word potato will not be added inside LearnVocabulary, because mean
 </div>
 </div>
 <div class="sect2">
-<h3 id="editing-a-word"><a class="link" href="#editing-a-word">Editing a word</a></h3>
+<h3 id="editing-a-word-manual-testing"><a class="link" href="#editing-a-word-manual-testing">Editing a word (Manual Testing)</a></h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -729,6 +757,10 @@ Expected: The word potato will not be added inside LearnVocabulary, because mean
 Expected: The word <code>potato</code> in index 1 will have its meaning changed from its existing meaning to its new definition "something lightweight". Details of the word is shown in the status message. Timestamp in the status bar is updated.</p>
 </li>
 <li>
+<p>Test case: <code>edit 1 m/something lightweight t/light t/weight</code><br>
+Expected: The word <code>potato</code> in index 1 will have its meaning changed from its existing meaning to its new definition "something lightweight". It&#8217;s tags (should they already been created in groupadd), will attach 2 tags <code>light</code> and <code>weight</code> to the word. Details of the word is shown in the status message. Timestamp in the status bar is updated.</p>
+</li>
+<li>
 <p>Test case: <code>edit n/potato t/</code><br>
 Expected: The word potato will not be edited inside LearnVocabulary, because tag field is missing, it is enforced that there can no longer be any words that have 1 tag. Error details shown in the status message. Status bar remains the same. Display remains the same.</p>
 </li>
@@ -739,4 +771,4 @@ Expected: The word potato will not be edited inside LearnVocabulary, because tag
 </div>
 </div>
 </div>
-</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-11-11 15:36:19 UTC</div></div></div></body></html>
+</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-11-11 23:03:46 UTC</div></div></div></body></html>
