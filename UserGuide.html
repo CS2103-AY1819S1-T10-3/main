@@ -141,9 +141,24 @@ A word can have any number of tags provided the groups of the tags are already c
 <p><code>add n/levitate m/to float or fly t/Test</code></p>
 </li>
 <li>
+<p><code>add n/levitate m/to float or fly t/Test t/RealTest</code> (Each tag is contained in their own prefix <code>t/</code>)</p>
+</li>
+<li>
 <p><code>add n/levitate m/to float or fly</code> (toLearn tag will be attached to word by default)</p>
 </li>
 </ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Group (tag) must already exist (been created) by user. The only default tag that has no need to be created is the "toLearn" tag.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -224,10 +239,26 @@ Edits the meaning of the first word to <code>diabloic magic or art</code>.</p>
 Edits the tag of the first word to <code>darkarts</code>, replacing every other tag.</p>
 </li>
 <li>
+<p><code>edit 1 t/darkarts t/magical</code><br>
+Edits the tag of the first word to <code>darkarts</code> and <code>magical</code>, replacing every other tag.</p>
+</li>
+<li>
 <p><code>edit 1 t/</code><br>
 Fails to remove all tags as there must be at least one tag attached to every word.</p>
 </li>
 </ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Group (tag) must already exist (been created) by user. The only default tag that has no need to be created is the "toLearn" tag.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -791,4 +822,4 @@ e.g.<code>select 2</code></p>
 </ul>
 </div>
 </div>
-</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-11-11 23:03:46 UTC</div></div></div></body></html>
+</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-11-11 23:07:44 UTC</div></div></div></body></html>
