@@ -1122,6 +1122,20 @@ The showgroup command is indicated as <code>ShowGroup</code> in <code>commands</
 <p>Improved from the previous versions, the <code>Add</code> and <code>Edit</code> commands have been refined in LearnVocabulary.
 There is also a minor feature added <code>Show</code>, which displays a filtered word list on the Ui.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Each tag being added follows AB4&#8217;s implementation, separate tags are considered via <code>t/</code><br>
+So, <code>t/happy</code>, <code>t/emotions</code>, <code>t/sad</code> is considered 3 tags and they MUST have already been added via <code>groupadd</code>.
+Tags will not be added as a whole if any of them do not exist.
+</td>
+</tr>
+</table>
+</div>
 <div class="sect4">
 <h5 id="add-command-improvements"><a class="link" href="#add-command-improvements">Add command improvements</a></h5>
 <div class="paragraph">
@@ -1133,7 +1147,7 @@ require at least one tag. As such, the default tag "toLearn" will be given to wo
 <p>Given below is an example usage scenario and how the add mechanism behaves at each step.</p>
 </div>
 <div class="paragraph">
-<p>Step 1. The user launches the application for the first time. The user types in <code>add n/fire m/something hot</code> into the CLI.</p>
+<p>Step 1. The user types in <code>add n/fire m/something hot</code> into the CLI.</p>
 </div>
 <div class="paragraph">
 <p>Step 2. <code>add n/fire m/something hot</code> will be parsed by LearnVocabularyParser, where the <code>add</code> command will be triggered, calling <code>AddCommandParser#parse()</code>.</p>
@@ -1142,24 +1156,10 @@ require at least one tag. As such, the default tag "toLearn" will be given to wo
 <p>Step 3a. Illegal characters will cause the command to throw an exception and await a new command.</p>
 </div>
 <div class="paragraph">
-<p>Step 3b. The word with all letters being parsed will be checked against LearnVocabulary to ensure no duplicate words.</p>
+<p>Step 3b. Word with letters being parsed will be checked against LearnVocabulary to ensure no duplicate words.</p>
 </div>
 <div class="paragraph">
 <p>Step 4. The word will have a "toLearn" tag attached and be added to LearnVocabulary after ensuring that there are no duplicates.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Each tag being added follows AB4&#8217;s implementation, separate tags are considered via <code>t/</code><br>
-So, <code>t/happy</code>, <code>t/emotions</code>, <code>t/sad</code> is considered 3 tags and they MUST have already been added via <code>groupadd</code>.<br>
-Tags will not be added as a whole if any of them do not exist.
-</td>
-</tr>
-</table>
 </div>
 </div>
 <div class="sect4">
@@ -1175,20 +1175,6 @@ Tags will not be added as a whole if any of them do not exist.
 </div>
 <div class="paragraph">
 <p>Step 2. The command box outputs that it is not possible, at least one tag must be attached to the word.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Each tag being added follows AB4&#8217;s implementation, separate tags are considered via <code>t/</code><br>
-So, <code>t/happy</code>, <code>t/emotions</code>, <code>t/sad</code> is considered 3 tags and they MUST have already been added via <code>groupadd</code>.
-Tags will not be added as a whole if any of them do not exist.
-</td>
-</tr>
-</table>
 </div>
 </div>
 <div class="sect4">
@@ -2641,4 +2627,4 @@ Expected: Similar to <code>triviaexit</code></p>
 </div>
 </div>
 </div>
-</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-11-12 00:05:30 UTC</div></div></div></body></html>
+</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-11-12 01:49:48 UTC</div></div></div></body></html>
